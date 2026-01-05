@@ -2,94 +2,13 @@ import React from 'react';
 import Image from 'next/image';
 import DataTable from '@/components/DataTable';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { cn, formatCurrency } from '@/lib/utils';
 import { TrendingDown, TrendingUp } from 'lucide-react';
-import { fetcher } from '@/lib/coingecko.action';
+import { fetcher } from '@/lib/coingecko.actions';
 
 
 // Dummy TrendingCoin dataset
-const dummyTrendingCoins: TrendingCoin[] = [
-  {
-    item: {
-      id: 'bitcoin',
-      name: 'Bitcoin',
-      symbol: 'BTC',
-      market_cap_rank: 1,
-      thumb: 'https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png',
-      large: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
-      data: {
-        price: 89113.00,
-        price_change_percentage_24h: {
-          usd: 2.45,
-        },
-      },
-    },
-  },
-  {
-    item: {
-      id: 'ethereum',
-      name: 'Ethereum',
-      symbol: 'ETH',
-      market_cap_rank: 2,
-      thumb: 'https://assets.coingecko.com/coins/images/279/thumb/ethereum.png',
-      large: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
-      data: {
-        price: 3456.78,
-        price_change_percentage_24h: {
-          usd: -1.23,
-        },
-      },
-    },
-  },
-  {
-    item: {
-      id: 'binancecoin',
-      name: 'BNB',
-      symbol: 'BNB',
-      market_cap_rank: 4,
-      thumb: 'https://assets.coingecko.com/coins/images/825/thumb/bnb-icon2_2x.png',
-      large: 'https://assets.coingecko.com/coins/images/825/large/bnb-icon2_2x.png',
-      data: {
-        price: 612.34,
-        price_change_percentage_24h: {
-          usd: 3.67,
-        },
-      },
-    },
-  },
-  {
-    item: {
-      id: 'ripple',
-      name: 'XRP',
-      symbol: 'XRP',
-      market_cap_rank: 5,
-      thumb: 'https://assets.coingecko.com/coins/images/32/thumb/ripple.png',
-      large: 'https://assets.coingecko.com/coins/images/32/large/ripple.png',
-      data: {
-        price: 2.89,
-        price_change_percentage_24h: {
-          usd: 5.12,
-        },
-      },
-    },
-  },
-  {
-    item: {
-      id: 'solana',
-      name: 'Solana',
-      symbol: 'SOL',
-      market_cap_rank: 6,
-      thumb: 'https://assets.coingecko.com/coins/images/4128/thumb/solana.png',
-      large: 'https://assets.coingecko.com/coins/images/4128/large/solana.png',
-      data: {
-        price: 198.45,
-        price_change_percentage_24h: {
-          usd: -2.34,
-        },
-      },
-    },
-  },
-];
+
 
 const columns: DataTableColumn<TrendingCoin>[] = [  
   {
@@ -136,14 +55,14 @@ const columns: DataTableColumn<TrendingCoin>[] = [
   {
     header: 'Price',
     cellClassName: 'price-cell',
-    cell: (coin) => `$${coin.item.data.price.toFixed(2)}`
+    cell: (coin) => formatCurrency(coin.item.data.price)
   },
 ];
 
 const page = async() => {
   // Using Bitcoin as a default coin for display
   // const coin = dummyTrendingCoins[0].item;
-const coin = await fetcher<CoinDetailsData>('coins/bitcoin',{
+const coin = await fetcher<CoinDetailsData>('/coins/bitcoin',{
   dex_pair_format:'symbol'
 });
 
@@ -156,14 +75,14 @@ const coin = await fetcher<CoinDetailsData>('coins/bitcoin',{
             width={56} height={56} />
           <div className='info'>
             <p>{coin.name} / {coin.symbol.toUpperCase()}</p>
-            <h1>${coin.market_data.current_price.usd}</h1>
+            <h1>{formatCurrency(coin.market_data.current_price.usd)}</h1>
           </div>
         </div>
       </div>
 
       <p>Trending Coins</p> b
       <DataTable
-        data={dummyTrendingCoins}
+        data={}
         columns={columns}
         rowKey={(row) => row.item.id}
       />
