@@ -80,9 +80,9 @@ const coin = await fetcher<CoinDetailsData>('/coins/bitcoin',{
         </div>
       </div>
 
-      <p>Trending Coins</p> b
+      <p>Trending Coins</p> 
       <DataTable
-        data={}
+        data={[]}
         columns={columns}
         rowKey={(row) => row.item.id}
       />
