@@ -8,7 +8,72 @@ import { fetcher } from '@/lib/coingecko.actions';
 
 
 // Dummy TrendingCoin dataset
-
+const dummyTrendingCoins: TrendingCoin[] = [
+  {
+    item: {
+      id: 'bitcoin',
+      name: 'Bitcoin',
+      symbol: 'BTC',
+      market_cap_rank: 1,
+      thumb: '/logo.svg',
+      large: '/logo.svg',
+      data: {
+        price: 45230.50,
+        price_change_percentage_24h: {
+          usd: 3.25,
+        },
+      },
+    },
+  },
+  {
+    item: {
+      id: 'ethereum',
+      name: 'Ethereum',
+      symbol: 'ETH',
+      market_cap_rank: 2,
+      thumb: '/logo.svg',
+      large: '/logo.svg',
+      data: {
+        price: 2850.75,
+        price_change_percentage_24h: {
+          usd: 2.15,
+        },
+      },
+    },
+  },
+  {
+    item: {
+      id: 'ripple',
+      name: 'Ripple',
+      symbol: 'XRP',
+      market_cap_rank: 6,
+      thumb: '/logo.svg',
+      large: '/logo.svg',
+      data: {
+        price: 2.42,
+        price_change_percentage_24h: {
+          usd: -1.85,
+        },
+      },
+    },
+  },
+  {
+    item: {
+      id: 'cardano',
+      name: 'Cardano',
+      symbol: 'ADA',
+      market_cap_rank: 8,
+      thumb: '/logo.svg',
+      large: '/logo.svg',
+      data: {
+        price: 0.98,
+        price_change_percentage_24h: {
+          usd: 5.42,
+        },
+      },
+    },
+  },
+];
 
 const columns: DataTableColumn<TrendingCoin>[] = [  
   {
@@ -82,7 +147,7 @@ const coin = await fetcher<CoinDetailsData>('/coins/bitcoin',{
 
       <p>Trending Coins</p> 
       <DataTable
-        data={[]}
+        data={dummyTrendingCoins}
         columns={columns}
         rowKey={(row) => row.item.id}
       />
