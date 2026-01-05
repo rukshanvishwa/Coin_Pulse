@@ -4,6 +4,7 @@ import DataTable from '@/components/DataTable';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { TrendingDown, TrendingUp } from 'lucide-react';
+import { fetcher } from '@/lib/coingecko.action';
 
 
 // Dummy TrendingCoin dataset
@@ -139,9 +140,13 @@ const columns: DataTableColumn<TrendingCoin>[] = [
   },
 ];
 
-const page = () => {
+const page = async() => {
   // Using Bitcoin as a default coin for display
-  const coin = dummyTrendingCoins[0].item;
+  // const coin = dummyTrendingCoins[0].item;
+const coin = await fetcher<CoinDetailsData>('coins/bitcoin',{
+  dex_pair_format:'symbol'
+});
+
 
   return <main className="main-container">
     <section className="home-grid">
@@ -156,7 +161,7 @@ const page = () => {
         </div>
       </div>
 
-      <p>Trending Coins</p>
+      <p>Trending Coins</p> b
       <DataTable
         data={dummyTrendingCoins}
         columns={columns}
