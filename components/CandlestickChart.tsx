@@ -1,6 +1,7 @@
 'use client';
 
-import { PERIOD_BUTTONS } from "@/constants";
+import { PERIOD_BUTTONS, PERIOD_CONFIG } from "@/constants";
+import { fetcher } from "@/lib/coingecko.actions";
 import { IChartApi, ISeriesApi } from "lightweight-charts";
 import { useRef, useState } from "react";
 
@@ -21,9 +22,18 @@ const CandlestickChart = ({
 
   const fetchOHLCData = async (selectedPeriod:Period) => {
     try{
+      const {days, interval}=PERIOD_CONFIG[selectedPeriod];
 
+     const newData = await fetcher<OHLCData[]>(`/coins/${coinId}/ohlc`, {
+                  vs_currency: 'usd',
+                  days,
+                  interval,
+                  precision: 'full',
+              })
+
+              setOhlcData(newData ?? [])
     }catch(e){
-      
+      console.error('Failed to fetch OHLC data:', e);
     }
   }
     
