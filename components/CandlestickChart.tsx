@@ -1,9 +1,11 @@
 'use client';
 
-import { PERIOD_BUTTONS, PERIOD_CONFIG } from "@/constants";
+import { getChartConfig, PERIOD_BUTTONS, PERIOD_CONFIG } from "@/constants";
 import { fetcher } from "@/lib/coingecko.actions";
-import { IChartApi, ISeriesApi } from "lightweight-charts";
-import { useRef, useState } from "react";
+import { createChart, IChartApi, ISeriesApi } from "lightweight-charts";
+import { use, useEffect, useRef, useState, useTransition } from "react";
+import { start } from "repl";
+
 
 const CandlestickChart = ({
   children,
@@ -18,7 +20,8 @@ const CandlestickChart = ({
 
   const [loading, setLoading] = useState(false);
   const[period, setPeriod]=useState(initialPeriod);
-  const[ohlcData, setOhlcData]=useState<OHLCData[]>(data??[]);
+  const[ohlcData, setOhlcData]=useState<OHLCData[]>(data ??[]);
+  const[isPending, startTransition]=useTransition()
 
   const fetchOHLCData = async (selectedPeriod:Period) => {
     try{
@@ -40,10 +43,23 @@ const CandlestickChart = ({
 
   const handlePeriodChange = (newPeriod:Period) => {
     if(newPeriod===period) return;
-    //TODO UPDATE PERIOD
-    setPeriod(newPeriod);
-  };
+    startTransition(async()=>{
+      setPeriod(newPeriod);
+      await fetchOHLCData(newPeriod);
+  });
 
+ useEffect(()=>{ 
+  const container = chartContainerRef.current;
+  if(!container) return;
+  const showTime=['daily', 'weekly', 'monthly'].includes(period);
+
+  const chart = createChart(container, {
+    ...getChartConfig(height, showTime),
+    width: container.clientWidth,
+  })
+
+ }, [height])
+  }
   return (<div id="candlestickChart">
     <div className="chart-header">
       <div className="flex-1">{children}</div>
@@ -52,10 +68,13 @@ const CandlestickChart = ({
         <span className="text-sm mx-2 font-medium
         text-purple-100/50">Period:</span>
         {PERIOD_BUTTONS.map(({ value, label }) => (
-          <button key={value} className={period===value? 'config-button active' : 
+          <button 
+          key={value} 
+          className={period===value ? 'config-button active' : 
             'config-button'} 
           onClick={() => handlePeriodChange(value)}
-            disabled={loading}>
+            disabled={loading}
+             >
             {label}
           </button>
         ))}
