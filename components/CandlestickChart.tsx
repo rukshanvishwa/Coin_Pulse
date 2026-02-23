@@ -1,8 +1,9 @@
 'use client';
 
-import { getChartConfig, PERIOD_BUTTONS, PERIOD_CONFIG } from "@/constants";
+import { getCandlestickConfig, getChartConfig, PERIOD_BUTTONS, PERIOD_CONFIG } from "@/constants";
 import { fetcher } from "@/lib/coingecko.actions";
-import { createChart, IChartApi, ISeriesApi } from "lightweight-charts";
+import { convertOHLCData } from "@/lib/utils";
+import { CandlestickSeries, createChart, IChartApi, ISeriesApi } from "lightweight-charts";
 import { use, useEffect, useRef, useState, useTransition } from "react";
 import { start } from "repl";
 
@@ -57,7 +58,20 @@ const CandlestickChart = ({
     ...getChartConfig(height, showTime),
     width: container.clientWidth,
   })
+  const series = chart.addSeries(CandlestickSeries, getCandlestickConfig())
 
+  series.setData(convertOHLCData(ohlcData));
+  chart.timeScale().fitContent();
+
+  chartRef.current=chart;
+  candleSeriesRef.current=series;
+
+  const observer = new ResizeObserver(entries => {
+    if(!entries.length) return;
+    chart.applyOptions({ width: entries[0].contentRect.width
+  })
+  })
+  observer.observe(container); 
  }, [height])
   }
   return (<div id="candlestickChart">
