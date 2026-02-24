@@ -71,7 +71,7 @@ const CandlestickChart = ({
     chart.applyOptions({ width: entries[0].contentRect.width
   })
   })
-  observer.observe(container); 
+  observer.observe(container);  
  }, [height])
   }
   return (<div id="candlestickChart">
