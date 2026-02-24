@@ -71,8 +71,32 @@ const CandlestickChart = ({
     chart.applyOptions({ width: entries[0].contentRect.width
   })
   })
-  observer.observe(container);  
+  observer.observe(container);
+  
+  return () => {
+    observer.disconnect();
+    chart.remove();
+    chartRef.current=null;
+    candleSeriesRef.current=null;
+    
+  }
+
  }, [height])
+
+useEffect(()=>{
+  if(!candleSeriesRef.current) return;
+
+  const convertedToSeconds=ohlcData.map(
+    (item)=>
+    [Math.floor(item[0]/1000), item[1], item[2], item[3], item[4]] as
+    OHLCData,
+  );
+  const conveted=convertOHLCData(convertedToSeconds);
+  candleSeriesRef.current.setData(conveted);
+  chartRef.current?.timeScale().fitContent();
+
+},[ohlcData, period])
+
   }
   return (<div id="candlestickChart">
     <div className="chart-header">
