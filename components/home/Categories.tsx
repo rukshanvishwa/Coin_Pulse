@@ -1,6 +1,7 @@
 import { fetcher } from "@/lib/coingecko.actions";
 import DataTable from "../DataTable";
 import Image from "next/image";
+import { formatCurrency } from "@/lib/utils";
 
 
 const Categories = async () => {
@@ -21,7 +22,25 @@ const Categories = async () => {
                 )
 
                 )
-        }
+        },
+        {
+            header:'24h Change',
+            cellClassName: 'change-cell',
+            cell: (category) => category.market_cap_change_24h,
+        },
+
+        {
+            header: 'Market Cap', 
+            cellClassName: 'market-cap-cell', 
+            cell: (category) =>formatCurrency(category.market_cap),
+        },
+
+        {
+            header: '24h Volume',
+            cellClassName: 'volume-cell',
+            cell: (category) => formatCurrency(category.volume_24h),
+        },
+
     ]
 
     return <div id="categories" className="custom-scrollbar">
