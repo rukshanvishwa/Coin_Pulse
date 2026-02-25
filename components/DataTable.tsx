@@ -61,4 +61,4 @@ const DataTable = <T,>({
   );
 };
 
-export default DataTable;
+export default DataTable; 
