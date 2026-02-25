@@ -83,7 +83,7 @@ const Coins = async ({ searchParams }: NextPageProps) => {
   return (
     <main id="coins-page">
       <div className="content">
-        <h4>All Coins</h4>
+        <h4>All Coins dr</h4>
 
         <DataTable
           tableClassName="coins-table"
