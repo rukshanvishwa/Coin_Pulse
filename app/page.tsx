@@ -1,7 +1,34 @@
-import React from 'react'
+// app/page.tsx
+import CoinOverview from '@/components/home/CoinOverview';
+import React, { Suspense } from 'react';
+import TrendingCoins from '@/components/home/TrendingCoins';
+import { CoinOverviewFallback, TrendingCoinsFallback, CategoriesFallback } from '@/components/home/fallback';
+import Categories from '@/components/home/Categories';
 
-const page = () => {
-  return <p className="text-3xl text-indigo-500">CoinPulse</p>
+
+const page = async () => {
+
+  return (
+    <main className="main-container">
+      <section className="home-grid">
+        <Suspense fallback={<CoinOverviewFallback />}>
+          <CoinOverview />
+        </Suspense>
+
+        <Suspense fallback={<TrendingCoinsFallback />}>
+          <TrendingCoins />
+        </Suspense>
+
+      </section>
+
+      <section className="w-full mt-7 space-y-4">
+        <Suspense fallback={<CategoriesFallback />}>
+          <Categories />
+        </Suspense>
+        
+      </section>
+    </main>
+  )
 }
 
 export default page
